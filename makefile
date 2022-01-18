@@ -4,19 +4,19 @@ libadd.so:add.cpp
 	g++ -fpic -shared $^ -o $@
 
 libsquare.so:square.cpp libadd.so
-	g++ -fpic -shared $^ -o $@ -L. -ladd
+	g++ -fpic -shared $^ -o $@ -L. -Wl,-rpath=. -ladd
 
 
 main:main.cpp libsquare.so
-	g++ -L. -o $@ -lsquare main.cpp
+	g++ -L. -o $@ -Wl,-rpath=. -lsquare main.cpp
 
 main1:main.cpp libsquare.so
-	g++ -L. -o $@ main.cpp -lsquare
+	g++ -L. -o $@ -Wl,-rpath=. main.cpp -lsquare
 
 main_needed:main.cpp libsquare.so
-	g++ -Wl,-as-needed -o $@ -L. -lsquare main.cpp
+	g++ -Wl,-as-needed -o $@ -Wl,-rpath=. -L. -lsquare main.cpp
 
 main_needed1:main.cpp libsquare.so
-	g++ -Wl,-as-needed -o $@ -L. main.cpp -lsquare
+	g++ -Wl,-as-needed -o $@ -L. -Wl,-rpath=. main.cpp -lsquare
 clean:
 	rm -rf *.so main main_needed* main1
